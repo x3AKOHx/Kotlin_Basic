@@ -1,3 +1,3 @@
 package connectfour
 
-data class Player(val name: String)
+data class Player(val name: String, val symbol: Char)

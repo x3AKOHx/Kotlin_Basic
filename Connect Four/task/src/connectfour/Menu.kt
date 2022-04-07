@@ -30,35 +30,35 @@ class Menu {
         println("${player.name}'s turn:")
         val input = readLine()!!
         val reg = "[0-9]+".toRegex()
+        var gameGoing = true
         if (input == "end") {
             print("Game over!")
-            return false
-        }
-        if (!input.matches(reg)) {
+            gameGoing = false
+        } else if (!input.matches(reg)) {
             println("Incorrect column number")
-            makeMove(player)
+            gameGoing = makeMove(player)
         } else if (input.toInt() !in 1..board.columns) {
             println("The column number is out of range (1 - ${board.columns})")
-            makeMove(player)
+            gameGoing = makeMove(player)
         } else if (board.field[0][input.toInt() - 1] != ' ') {
             println("Column $input is full")
-            makeMove(player)
+            gameGoing = makeMove(player)
         } else {
             when (board.putCoin(input.toInt(), player.symbol)) {
-                "isGoing" -> return true
+                "isGoing" -> gameGoing = true
                 "Draw" -> {
                     board.drawTheField()
                     print("It is a draw\nGame over!")
-                    return false
+                    gameGoing = false
                 }
                 "Win" -> {
                     board.drawTheField()
                     println("Player ${player.name} won")
                     print("Game over!")
-                    return false
+                    gameGoing = false
                 }
             }
         }
-        return true
+        return gameGoing
     }
 }

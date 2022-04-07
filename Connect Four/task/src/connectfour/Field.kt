@@ -109,7 +109,7 @@ class Field {
             var diagonal = ""
             var x = i
             var y = 0
-            while (x < rows - 1 && y < columns - 1 && x >= 0 && y >= 0) {
+            while (x < rows && y < columns && x >= 0 && y >= 0) {
                 diagonal += field[x][y]
                 x++
                 y++
@@ -120,7 +120,7 @@ class Field {
             var diagonal = ""
             var x = 0
             var y = i
-            while (x < rows - 1 && y < columns - 1 && x >= 0 && y >= 0) {
+            while (x < rows && y < columns && x >= 0 && y >= 0) {
                 diagonal += field[x][y]
                 x++
                 y++
@@ -131,7 +131,7 @@ class Field {
             var diagonal = ""
             var x = i
             var y = columns - 1
-            while (x <= rows - 1 && y >= 0 && x >= 0) {
+            while (x < rows && y >= 0 && x >= 0) {
                 diagonal += field[x][y]
                 x++
                 y--
@@ -142,7 +142,7 @@ class Field {
             var diagonal = ""
             var x = 0
             var y = i
-            while (x <= rows - 1 && y <= columns - 1 && x >= 0 && y >= 0) {
+            while (x < rows && y < columns && x >= 0 && y >= 0) {
                 diagonal += field[x][y]
                 x++
                 y--

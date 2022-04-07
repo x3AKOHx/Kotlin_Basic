@@ -44,8 +44,20 @@ class Menu {
             println("Column $input is full")
             makeMove(player)
         } else {
-            board.putCoin(input.toInt(), player.symbol)
-            return true
+            when (board.putCoin(input.toInt(), player.symbol)) {
+                "isGoing" -> return true
+                "Draw" -> {
+                    board.drawTheField()
+                    print("It is a draw\nGame over!")
+                    return false
+                }
+                "Win" -> {
+                    board.drawTheField()
+                    println("Player ${player.name} won")
+                    print("Game over!")
+                    return false
+                }
+            }
         }
         return true
     }

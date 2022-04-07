@@ -49,12 +49,112 @@ class Field {
         print("╝\n")
     }
 
-    fun putCoin(column: Int, symbol: Char) {
+    fun putCoin(column: Int, symbol: Char): String {
         for (i in rows - 1 downTo 0) {
             if (field[i][column - 1] == ' ') {
                 field[i][column - 1] = symbol
-                break
+                return isGameEnded()
             }
         }
+        return "isGoing"
+    }
+
+    private fun isGameEnded(): String {
+        var gameState = "Draw"
+        for (i in field) {
+            if (' ' in i) gameState = "isGoing"
+        }
+        if (haveWinner()) gameState = "Win"
+        return gameState
+    }
+
+    private fun haveWinner(): Boolean {
+        var win = false
+        var count = 0
+        //test horizontal lines
+        for (i in field) {
+            for (x in 1 until columns) {
+                if (i[x] == i[x-1] && i[x] != ' ') {
+                    count++
+                    if (count == 3) {
+                        win = true
+                        break
+                    }
+                } else {
+                    count = 0
+                }
+            }
+        }
+        //test horizontal ended
+        count = 0
+        //test vertical
+        for (j in 0 until columns) {
+            for (i in 1 until rows) {
+                if (field[i][j] == field[i - 1][j] && field[i][j] != ' ') {
+                    count++
+                    if (count == 3) {
+                        win = true
+                        break
+                    }
+                } else {
+                    count = 0
+                }
+            }
+        }
+        //test vertical ended
+        count = 0
+        //test diagonal
+        val diagonalsList = arrayListOf<String>()
+        for (i in 0..rows - 4) {
+            var diagonal = ""
+            var x = i
+            var y = 0
+            while (x < rows - 1 && y < columns - 1 && x >= 0 && y >= 0) {
+                diagonal += field[x][y]
+                x++
+                y++
+            }
+            diagonalsList.add(diagonal)
+        }
+        for (i in 1..columns - 4) {
+            var diagonal = ""
+            var x = 0
+            var y = i
+            while (x < rows - 1 && y < columns - 1 && x >= 0 && y >= 0) {
+                diagonal += field[x][y]
+                x++
+                y++
+            }
+            diagonalsList.add(diagonal)
+        }
+        for (i in 0..rows - 4) {
+            var diagonal = ""
+            var x = i
+            var y = columns - 1
+            while (x <= rows - 1 && y >= 0 && x >= 0) {
+                diagonal += field[x][y]
+                x++
+                y--
+            }
+            diagonalsList.add(diagonal)
+        }
+        for (i in columns - 2 downTo 2) {
+            var diagonal = ""
+            var x = 0
+            var y = i
+            while (x <= rows - 1 && y <= columns - 1 && x >= 0 && y >= 0) {
+                diagonal += field[x][y]
+                x++
+                y--
+            }
+            diagonalsList.add(diagonal)
+        }
+        for (i in diagonalsList) {
+            if (i.contains("oooo") || i.contains("****")) {
+                win = true
+            }
+        }
+        //test diagonals ended
+        return win
     }
 }

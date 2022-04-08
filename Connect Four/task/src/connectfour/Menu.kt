@@ -13,16 +13,49 @@ class Menu {
         println("Second player's name:")
         playerTwo = Player(readLine()!!, '*')
         board.createCustomField()
+        println("Do you want to play single or multiple games?\n" +
+                "For a single game, input 1 or press Enter\n" +
+                "Input a number of games:")
+        val amountOfGames = gameType()
         println("${playerOne.name} VS ${playerTwo.name}\n${board.rows} X ${board.columns} board")
-        board.drawTheField()
-        gameProcess()
+        gameProcess(amountOfGames)
     }
 
-    private fun gameProcess() {
+    private fun gameProcess(games: Int = 1) {
         var currentPlayer = playerOne
-        while (makeMove(currentPlayer)) {
+        var gameCount = 1
+        var playerOneScore = 0
+        var playerTwoScore = 0
+        if (games > 1) {
+            println("Total $games games")
+            for (i in 1..games) {
+                println("Game #$gameCount")
+                board.drawTheField()
+                while (makeMove(currentPlayer)) {
+                    board.drawTheField()
+                    currentPlayer = if (currentPlayer == playerOne) playerTwo else playerOne
+                }
+                if (board.isGameEnded() == "Draw") {
+                    playerOneScore++
+                    playerTwoScore++
+                } else {
+                    if (currentPlayer == playerOne) playerOneScore += 2 else playerTwoScore += 2
+                }
+                println("Score")
+                println("${playerOne.name}: $playerOneScore ${playerTwo.name}: $playerTwoScore")
+                board.clearField()
+                gameCount++;
+                currentPlayer = if (currentPlayer == playerOne) playerTwo else playerOne
+            }
+            print("Game over!")
+        } else {
+            println("Single game")
             board.drawTheField()
-            currentPlayer = if (currentPlayer == playerOne) playerTwo else playerOne
+            while (makeMove(currentPlayer)) {
+                board.drawTheField()
+                currentPlayer = if (currentPlayer == playerOne) playerTwo else playerOne
+            }
+            print("Game over!")
         }
     }
 
@@ -48,17 +81,30 @@ class Menu {
                 "isGoing" -> gameGoing = true
                 "Draw" -> {
                     board.drawTheField()
-                    print("It is a draw\nGame over!")
+                    println("It is a draw")
                     gameGoing = false
                 }
                 "Win" -> {
                     board.drawTheField()
                     println("Player ${player.name} won")
-                    print("Game over!")
                     gameGoing = false
                 }
             }
         }
         return gameGoing
+    }
+
+    private fun gameType(): Int {
+        val input = readLine()!!
+        if (input == "") return 1
+        return if (input.matches("^[1-9][0-9]*\$".toRegex())) {
+            input.toInt()
+        } else {
+            println("Invalid input")
+            println("Do you want to play single or multiple games?\n" +
+                    "For a single game, input 1 or press Enter\n" +
+                    "Input a number of games:")
+            gameType()
+        }
     }
 }

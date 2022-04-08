@@ -49,6 +49,10 @@ class Field {
         print("╝\n")
     }
 
+    fun clearField() {
+        field = Array(rows) {Array(columns) {' '} }
+    }
+
     fun putCoin(column: Int, symbol: Char): String {
         for (i in rows - 1 downTo 0) {
             if (field[i][column - 1] == ' ') {
@@ -59,7 +63,7 @@ class Field {
         return "isGoing"
     }
 
-    private fun isGameEnded(): String {
+    fun isGameEnded(): String {
         var gameState = "Draw"
         for (i in field) {
             if (' ' in i) gameState = "isGoing"
